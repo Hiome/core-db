@@ -1,3 +1,2 @@
-GitPython==2.1.11
 psycopg2==2.7.4
 yoyo-migrations==6.1.0
