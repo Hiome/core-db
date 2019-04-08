@@ -1,4 +1,17 @@
 #!/bin/bash
 set -e
 
+echo "Installing dependencies..."
 sudo pip install -r requirements.txt
+
+if [ ! -e /data/mosquitto ]; then
+  echo "Creating mosquitto dir..."
+  sudo mkdir -p /data/mosquitto
+  sudo chown mosquitto:mosquitto /data/mosquitto/ -R
+fi
+
+if [ ! -e /data/postgresql/9.6/main ]; then
+  echo "Creating postgres db..."
+  sudo -su postgres /usr/lib/postgresql/9.6/bin/pg_ctl initdb -D /data/postgresql/9.6/main
+  sudo -su postgres psql -tc "SELECT 1 FROM pg_database WHERE datname = 'hiome'" | grep -q 1 || psql -c "create database hiome;"
+fi

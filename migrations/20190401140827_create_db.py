@@ -3,11 +3,6 @@ from yoyo import step
 __transactional__ = False
 
 step(
-    "CREATE DATABASE hiome",
-    "DROP DATABASE hiome",
-)
-
-step(
   """
   create table rooms (
     id text primary key,
