@@ -2,6 +2,7 @@
 
 import os
 import raven
+import subprocess
 from yoyo import get_backend
 from yoyo import read_migrations
 
@@ -17,5 +18,7 @@ raven.Client(
 backend = get_backend('postgres://')
 migrations = read_migrations('/home/pi/core-db/migrations')
 backend.apply_migrations(backend.to_apply(migrations))
+
+subprocess.check_output('sudo systemctl restart pgbouncer.service', shell=True)
 
 print "done migrating"
