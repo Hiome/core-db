@@ -17,6 +17,8 @@ raven.Client(
 backend = get_backend('postgres://')
 migrations = read_migrations('/home/pi/core-db/migrations')
 
+if backend._is_locked:
+  backend.break_lock()
 with backend.lock():
   backend.apply_migrations(backend.to_apply(migrations))
 
