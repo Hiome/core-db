@@ -17,7 +17,15 @@ raven.Client(
 
 backend = get_backend('postgres://')
 migrations = read_migrations('/home/pi/core-db/migrations')
-backend.apply_migrations(backend.to_apply(migrations))
+
+try:
+  backend.apply_migrations(backend.to_apply(migrations))
+except Exception as e:
+  # TODO delete this whole except block
+  if e.message == 'column "sensitivity" of relation "sensors" already exists':
+    backend.mark_migrations(backend.to_apply(migrations))
+  else:
+    raise
 
 subprocess.check_output('sudo systemctl restart pgbouncer.service', shell=True)
 
