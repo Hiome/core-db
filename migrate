@@ -1,7 +1,5 @@
 #!/usr/bin/python
 
-import datetime # TODO DELETE ME TOO
-
 import os
 import raven
 import subprocess
@@ -19,19 +17,7 @@ raven.Client(
 
 backend = get_backend('postgres://')
 migrations = read_migrations('/home/pi/core-db/migrations')
-
-try:
-  backend.apply_migrations(backend.to_apply(migrations))
-except Exception as e:
-  # TODO delete this whole except block and datetime import
-  if e.message.strip() == 'column "sensitivity" of relation "sensors" already exists':
-    migration = migrations[-1]
-    sql = backend.mark_migration_sql.format(backend)
-    backend.execute(sql, {'migration_hash': migration.hash,
-                       'migration_id': migration.id,
-                       'when': datetime.datetime.utcnow()})
-  else:
-    raise
+backend.apply_migrations(backend.to_apply(migrations))
 
 subprocess.check_output('sudo systemctl restart pgbouncer.service', shell=True)
 
