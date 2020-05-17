@@ -1,19 +1,11 @@
 #!/usr/bin/python
 
-import os
-import raven
+import sentry_sdk
 import subprocess
 from yoyo import get_backend
 from yoyo import read_migrations
 
-with open(os.getenv('UID_FILE', '/sys/class/net/eth0/address'), "r") as file:
-  MACHINEID = file.read().strip()
-
-raven.Client(
-  release=raven.fetch_git_sha(os.path.dirname(__file__)),
-  site=MACHINEID,
-  name='core-db'
-).user_context({'id': MACHINEID})
+sentry_sdk.init()
 
 backend = get_backend('postgres://')
 migrations = read_migrations('/home/pi/core-db/migrations')
