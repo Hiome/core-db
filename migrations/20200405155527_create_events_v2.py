@@ -14,7 +14,6 @@ step(
     to_object_id text,
     to_attribute text,
     payload json not null,
-    retain boolean not null default false,
     context_ts bigint,
     context_topic text,
     primary key (ts, topic)
@@ -68,13 +67,6 @@ step(
   CREATE INDEX events_context ON events (context_ts, context_topic) WHERE context_ts IS NOT NULL
   """,
   "DROP INDEX events_context"
-)
-
-step(
-  """
-  CREATE INDEX events_retain ON events (retain) WHERE retain IS TRUE
-  """,
-  "DROP INDEX events_retain"
 )
 
 step(
