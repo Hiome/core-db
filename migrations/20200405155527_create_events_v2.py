@@ -16,6 +16,7 @@ step(
     payload json not null,
     context_ts bigint,
     context_topic text,
+    tmpl text,
     primary key (ts, topic)
   )
   """,
@@ -67,6 +68,13 @@ step(
   CREATE INDEX events_context ON events (context_ts, context_topic) WHERE context_ts IS NOT NULL
   """,
   "DROP INDEX events_context"
+)
+
+step(
+  """
+  CREATE INDEX events_tmpl ON events (tmpl) WHERE tmpl IS NOT NULL
+  """,
+  "DROP INDEX events_tmpl"
 )
 
 step(
